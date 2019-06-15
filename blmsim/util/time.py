@@ -35,7 +35,7 @@ class Time:
         return self.ticks == other.ticks
 
     def __sub__(self, other):
-        return self.ticks - other.ticks
+        return Time(ticks=self.ticks - other.ticks)
 
 class Clock(Time):
     def __init__(self, time=0.0, ticks=None, tick_value=0.01):
