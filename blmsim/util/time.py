@@ -54,7 +54,7 @@ class Clock(Time):
         self.ticks = max(self.ticks-1, 0)
 
     def reset(self):
-        self.ticks = self.default
+        self.set_time(self.default)
 
     def hook(self, *hook):
         self.hooks = self.hooks + list(hook)
