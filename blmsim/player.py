@@ -72,15 +72,15 @@ class Player:
         self.casting_time.tock()
 
     def receive_buff(self, buff):
-        self.me(f"received {buff} !")
         if isinstance(buff, ChargeBuff):
             self.charge_buffs.append(buff)
-        for b in self.buffs:
-            if isinstance(b, type(buff)):
-                self.me(f"already has {b.name}. The buff's duration is renewed")
-                self.buffs.remove(b)
-        self.buffs.append(buff)
+        if buff in self.buffs:
+            #self.me(f"already has {buff.name}. The buff's duration is renewed")
+            buff.renew(buff)
+        else:
+            self.buffs.append(buff)
         self.apply_buffs()
+        self.me(f"received {buff} !")
 
     def check_enochian(self):
         if 'Enochian' in self.buffs:

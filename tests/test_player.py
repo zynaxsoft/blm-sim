@@ -39,9 +39,18 @@ class TestPlayer(unittest.TestCase):
         clock.tick() # trigger cast Blizzard I
         self.assertFalse('Swiftcast' in player.buffs)
         self.assertNotEqual(player.buffed['cast_time_multiplier'], 0)
-        player.cast('Blizzard I')
+
+    def test_player_gcd(self):
+        clock = Clock()
+        player = Player('John', clock)
+        self.assertTrue(player.cast('Blizzard I'))
+        self.assertTrue(player.casting)
+        tick_to_complete = Clock(player.skills['Blizzard I'].cast_time).ticks
+        for i in range(tick_to_complete):
+            clock.tick()
+        self.assertTrue(player.casting)
         clock.tick()
-        self.assertGreater(player.casting_time, Clock(0))
+        self.assertFalse(player.casting)
 
     def test_player_enochian_validity(self):
         clock = Clock()

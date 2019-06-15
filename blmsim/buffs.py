@@ -6,13 +6,16 @@ class DurationBuff:
 
     def __init__(self, name, duration):
         self.name = name
-        self.duration = Clock(duration)
+        self.duration = Clock(default=duration)
 
     def is_exhausted(self):
         return self.duration.is_zero()
 
     def buff(self, target):
         pass
+
+    def renew(self, new):
+        self.duration.reset()
 
     def __str__(self):
         return self.name
@@ -69,7 +72,8 @@ class AstralUmbral(DurationBuff):
         self.stack = stack
         self.max_stack = 3
 
-    def gain_stack(self):
+    def renew(self, new):
+        super().renew(new)
         self.stack = min(self.max_stack, self.stack+1)
 
     def buff(self, target):
@@ -80,8 +84,8 @@ class AstralUmbral(DurationBuff):
 
     def __eq__(self, other):
         compare = self.name == str(other)
+        compare = compare or str(self) == str(other)
         compare = compare or 'Astral or Umbral' == str(other)
-        compare = compare or f"{self.name} {self.stack}" == str(other)
         return compare
 
 class AstralFire(AstralUmbral):
