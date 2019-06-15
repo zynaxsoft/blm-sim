@@ -1,10 +1,8 @@
 from blmsim.util.time import Clock, Time
 from blmsim.player import Player
 
-clock = Clock()
+clock = Clock(tick_value=0.001)
 player = Player('Tomoyo', clock)
-player.leyline()
 while clock < Time(20):
-#   if not player.casting:
-    player.fire4()
+    player.cast('FireIV')
     clock.tick()
