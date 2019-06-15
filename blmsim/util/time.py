@@ -38,8 +38,8 @@ class Time:
         return Time(ticks=self.ticks - other.ticks)
 
 class Clock(Time):
-    def __init__(self, time=0.0, ticks=None, tick_value=0.01, default=0.0):
-        if default > 0.0 and time == 0.0:
+    def __init__(self, time=None, ticks=None, tick_value=0.01, default=0.0):
+        if time is None:
             time = default
         super().__init__(time, ticks, tick_value)
         self.hooks = []
