@@ -41,6 +41,7 @@ class Player:
             self.casting_time.set_time(self.calc_cast_time(skill.cast_time))
             self.gcd.default = self.buffed['gcd']
             return skill.execute(self, target)
+        print(f"[{self.clock}] {skill} is not yet ready !!")
         return False
 
     def on_casted(self):
@@ -74,9 +75,12 @@ class Player:
     def receive_buff(self, buff):
         if isinstance(buff, ChargeBuff):
             self.charge_buffs.append(buff)
-        if buff in self.buffs:
-            #self.me(f"already has {buff.name}. The buff's duration is renewed")
-            buff.renew(buff)
+        for b in self.buffs:
+            if isinstance(b, type(buff)):
+                b.renew(buff)
+                buff = b
+                break
+                #self.me(f"already has {buff}. The buff's duration is renewed")
         else:
             self.buffs.append(buff)
         self.apply_buffs()
@@ -90,6 +94,7 @@ class Player:
         return False
 
     def remove_buff(self, buff):
+        self.me(f"loses {buff}.")
         self.buffs.remove(buff)
         self.apply_buffs()
 

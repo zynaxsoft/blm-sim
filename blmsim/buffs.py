@@ -92,7 +92,6 @@ class AstralFire(AstralUmbral):
 
     def __init__(self, stack):
         super().__init__('Astral Fire', stack)
-        self.stack = stack
 
     def buff(self, target):
         pass
@@ -101,7 +100,6 @@ class UmbralIce(AstralUmbral):
 
     def __init__(self, stack):
         super().__init__('Umbral Ice', stack)
-        self.stack = stack
 
     def buff(self, target):
         pass
