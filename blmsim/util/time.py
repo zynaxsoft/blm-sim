@@ -39,6 +39,8 @@ class Time:
 
 class Clock(Time):
     def __init__(self, time=0.0, ticks=None, tick_value=0.01, default=0.0):
+        if default > 0.0 and time == 0.0:
+            time = default
         super().__init__(time, ticks, tick_value)
         self.hooks = []
         self.default = default
