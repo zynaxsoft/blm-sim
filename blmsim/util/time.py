@@ -1,7 +1,7 @@
 import math
 
 class Time:
-    def __init__(self, time=0.0, ticks=None, tick_value=0.01):
+    def __init__(self, time=0.0, ticks=None, tick_value=0.001):
         self.tick_value = tick_value
         if ticks is not None:
             self.ticks = ticks
@@ -22,23 +22,36 @@ class Time:
     def __repr__(self):
         return f'{self.get_time():.{self.significant_order}f}'
 
+    def __check_ticks(self, other):
+        if self.tick_value != other.tick_value:
+            raise TickValueError
+
     def __lt__(self, other):
+        self.__check_ticks(other)
         return self.ticks < other.ticks
 
     def __gt__(self, other):
+        self.__check_ticks(other)
         return self.ticks > other.ticks
 
     def __add__(self, other):
+        self.__check_ticks(other)
         return Time(ticks=self.ticks + other.ticks)
 
     def __eq__(self, other):
+        self.__check_ticks(other)
         return self.ticks == other.ticks
 
     def __sub__(self, other):
+        self.__check_ticks(other)
         return Time(ticks=self.ticks - other.ticks)
 
+class TickValueError(Exception):
+    def __init__(self):
+        self.message = 'Error: operating with different tick value'
+
 class Clock(Time):
-    def __init__(self, time=None, ticks=None, tick_value=0.01, default=0.0):
+    def __init__(self, time=None, ticks=None, tick_value=0.001, default=0.0):
         if time is None:
             time = default
         super().__init__(time, ticks, tick_value)

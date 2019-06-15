@@ -12,13 +12,16 @@ class Skill:
     def is_ready(self):
         return self.clock.is_zero()
 
-    def process(self, target):
+    def process(self, caster, target):
         pass
 
-    def execute(self, target):
-        if self.is_ready():
+    def is_castable(self, caster):
+        return True
+
+    def execute(self, caster, target):
+        if self.is_ready() and self.is_castable(caster):
             self.clock.reset()
-            self.process(target)
+            self.process(caster, target)
             return True
         return False
 
@@ -42,7 +45,12 @@ class FireIV(GCD):
                 cast_time = 2.8,
                 )
 
-    def process(self, target):
+    def is_castable(self, caster):
+        if 'Enochian' in caster.buffs:
+            return True
+        return False
+
+    def process(self, caster, target):
         pass
 
 @gcd
@@ -55,8 +63,27 @@ class BlizzardI(GCD):
                 cast_time = 2.5,
                 )
 
-    def process(self, target):
-        pass
+    def process(self, caster, target):
+        buff = UmbralIce(1)
+        caster.receive_buff(buff)
+
+@ogcd
+class Enochian(OGCD):
+
+    def __init__(self):
+        super().__init__(
+                name = 'Enochian',
+                cooldown = 30,
+                )
+
+    def is_castable(self, caster):
+        if 'Astral or Umbral' in caster.buffs:
+            return True
+        return False
+
+    def process(self, caster, target):
+        buff = EnochianBuff()
+        target.receive_buff(buff)
 
 @ogcd
 class LeyLine(OGCD):
@@ -67,7 +94,7 @@ class LeyLine(OGCD):
                 cooldown = 90,
                 )
 
-    def process(self, target):
+    def process(self, caster, target):
         buff = LeyLineBuff()
         target.receive_buff(buff)
 
@@ -80,6 +107,6 @@ class Swiftcast(OGCD):
                 cooldown = 60,
                 )
 
-    def process(self, target):
+    def process(self, caster, target):
         buff = SwiftcastBuff()
         target.receive_buff(buff)

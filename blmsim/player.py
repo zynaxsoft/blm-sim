@@ -13,6 +13,7 @@ class Player:
                 }
         self.buffed = dict(self.base)
         self.buffs = []
+        self.charge_buffs = []
         # cooldown attribute
         self.gcd = Clock(0, default=self.base['gcd'])
         self.casting_time = Clock(0)
@@ -26,7 +27,6 @@ class Player:
         for k, v in OGCD_dict.items():
             self.skills[k] = v()
         self.on_cd_ogcds = []
-        self.charge_buffs = []
 
     def calc_cast_time(self, cast_time):
         return cast_time*self.buffed['cast_time_multiplier']
@@ -40,7 +40,7 @@ class Player:
             self.me(f"begins to cast {self.casting}.")
             self.casting_time.set_time(self.calc_cast_time(skill.cast_time))
             self.gcd.default = self.buffed['gcd']
-            return skill.execute(target)
+            return skill.execute(self, target)
         return False
 
     def on_casted(self):
@@ -63,6 +63,8 @@ class Player:
         for buff in self.buffs:
             if buff.is_exhausted():
                 self.remove_buff(buff)
+            buff.duration.tock()
+        self.check_enochian()
         if self.casting_time.is_zero() and self.casting:
             self.on_casted()
         self.gcd.tock()
@@ -78,6 +80,13 @@ class Player:
                 self.buffs.remove(b)
         self.buffs.append(buff)
         self.apply_buffs()
+
+    def check_enochian(self):
+        if 'Enochian' in self.buffs:
+            if 'Astral or Umbral' in self.buffs:
+                return True
+            self.buffs.remove('Enochian')
+        return False
 
     def remove_buff(self, buff):
         self.buffs.remove(buff)

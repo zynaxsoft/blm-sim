@@ -13,6 +13,15 @@ class DurationBuff:
     def buff(self, target):
         pass
 
+    def __str__(self):
+        return self.name
+
+    def __eq__(self, other):
+        return str(self) == str(other)
+
+    def __hash__(self):
+        return hash(str(self))
+
 class ChargeBuff(DurationBuff):
 
     def __init__(self, name, duration, charge, charge_limit=0):
@@ -33,6 +42,61 @@ class ChargeBuff(DurationBuff):
         if self.charge <= 0:
             return True
         return super().is_exhausted()
+
+class EnochianBuff(DurationBuff):
+
+    def __init__(self):
+        super().__init__(
+                name = 'Enochian',
+                duration = 0,
+                )
+        self.exhausted = False
+
+    def is_exhausted(self):
+        return self.exhausted
+
+    def buff(self, target):
+        pass
+
+class AstralUmbral(DurationBuff):
+
+    def __init__(self, name, stack):
+        super().__init__(
+                name,
+                duration = 15,
+                )
+        self.stack = stack
+        self.max_stack = 3
+
+    def gain_stack(self):
+        self.stack = min(self.max_stack, self.stack+1)
+
+    def buff(self, target):
+        pass
+
+    def __eq__(self, other):
+        compare = str(self.name) == str(other)
+        compare = compare or 'Astral or Umbral' == str(other)
+        compare = compare or f"{self.name} {self.stack}" == str(other)
+        return compare
+
+class AstralFire(AstralUmbral):
+
+    def __init__(self, stack):
+        super().__init__('Astral Fire', stack)
+        self.stack = stack
+
+    def buff(self, target):
+        pass
+
+class UmbralIce(AstralUmbral):
+
+    def __init__(self, stack):
+        super().__init__('Umbral Ice', stack)
+        self.stack = stack
+
+    def buff(self, target):
+        pass
 
 class LeyLineBuff(DurationBuff):
 
