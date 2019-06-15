@@ -1,4 +1,5 @@
 from blmsim.util.time import Clock, Time
+from blmsim.util.skilldict import gcd, ogcd
 from blmsim.buffs import *
 
 class Skill:
@@ -14,7 +15,7 @@ class Skill:
     def process(self, target):
         pass
 
-    def execute(self, target=None):
+    def execute(self, target):
         if self.is_ready():
             self.clock.reset()
             self.process(target)
@@ -23,7 +24,7 @@ class Skill:
 
 class GCD(Skill):
 
-    def __init__(self, name, gcd_clock, cast_time):
+    def __init__(self, name, gcd_clock, cast_time=2.5):
         super().__init__(name, gcd_clock, cast_time)
 
 class OGCD(Skill):
@@ -31,6 +32,7 @@ class OGCD(Skill):
     def __init__(self, name, cooldown):
         super().__init__(name, Clock(0, default=cooldown), 0.75)
 
+@gcd
 class FireIV(GCD):
 
     def __init__(self, gcd_clock):
@@ -41,8 +43,22 @@ class FireIV(GCD):
                 )
 
     def process(self, target):
-        print('FFIIRREE')
+        pass
 
+@gcd
+class BlizzardI(GCD):
+
+    def __init__(self, gcd_clock):
+        super().__init__(
+                name = 'Blizzard I',
+                gcd_clock = gcd_clock,
+                cast_time = 2.5,
+                )
+
+    def process(self, target):
+        pass
+
+@ogcd
 class LeyLine(OGCD):
 
     def __init__(self):
@@ -55,7 +71,8 @@ class LeyLine(OGCD):
         buff = LeyLineBuff()
         target.receive_buff(buff)
 
-class SwiftCast(OGCD):
+@ogcd
+class Swiftcast(OGCD):
 
     def __init__(self):
         super().__init__(
