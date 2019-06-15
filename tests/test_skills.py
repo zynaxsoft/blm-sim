@@ -39,5 +39,16 @@ class TestSkills(unittest.TestCase):
         self.assertEqual(player.buffed['cast_time_multiplier'], 0)
         self.assertEqual(player.buffed['gcd'], player.base['gcd'])
 
+    def test_skill_apply_buff_after_gcd_casted(self):
+        clock = Clock()
+        player = Player('John', clock)
+        player.cast('Blizzard I')
+        tick_to_complete = Clock(player.skills['Blizzard I'].cast_time).ticks
+        for i in range(tick_to_complete):
+            clock.tick()
+            self.assertFalse('Umbral Ice' in player.buffs)
+        clock.tick()
+        self.assertTrue('Umbral Ice' in player.buffs)
+
 if __name__ == '__main__':
     unittest.main()

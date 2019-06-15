@@ -1,5 +1,4 @@
 from blmsim.util.time import Clock, Time
-from blmsim.buffs import DurationBuff
 from blmsim.skills import *
 from blmsim.util.skillmeta import GCD_dict, OGCD_dict
 
@@ -33,10 +32,11 @@ class Player:
 
     def cast(self, skill_name, target=None):
         skill = self.skills[skill_name]
-        if not self.casting:
+        if not self.casting and skill.is_ready():
             self.casting = skill
             if isinstance(skill, OGCD):
                 self.on_cd_ogcds.append(skill)
+            print("-----------------------")
             self.me(f"begins to cast {self.casting}.")
             self.casting_time.set_time(self.calc_cast_time(skill.cast_time))
             self.gcd.default = self.buffed['gcd']
@@ -51,10 +51,9 @@ class Player:
             for buff in self.charge_buffs:
                 if buff.deduct_charge_for_skill(self.casting):
                     if buff.is_exhausted():
+                        self.charge_buffs.remove(buff)
                         self.remove_buff(buff)
                     break
-        if isinstance(self.casting, GCD):
-            self.gcd.reset()
         self.casting = False
 
     def tock(self):
@@ -73,7 +72,7 @@ class Player:
         self.casting_time.tock()
 
     def receive_buff(self, buff):
-        self.me(f"received {buff.name} !")
+        self.me(f"received {buff} !")
         if isinstance(buff, ChargeBuff):
             self.charge_buffs.append(buff)
         for b in self.buffs:

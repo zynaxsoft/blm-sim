@@ -75,8 +75,11 @@ class AstralUmbral(DurationBuff):
     def buff(self, target):
         pass
 
+    def __str__(self):
+        return f"{self.name} {'I'*self.stack}"
+
     def __eq__(self, other):
-        compare = str(self.name) == str(other)
+        compare = self.name == str(other)
         compare = compare or 'Astral or Umbral' == str(other)
         compare = compare or f"{self.name} {self.stack}" == str(other)
         return compare
