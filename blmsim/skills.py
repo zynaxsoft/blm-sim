@@ -1,39 +1,6 @@
 from blmsim.util.time import Clock, Time
-from blmsim.util.skilldict import gcd, ogcd
+from blmsim.util.skillmeta import Skill, GCD, OGCD, gcd, ogcd
 from blmsim.buffs import *
-
-class Skill:
-
-    def __init__(self, name, clock, cast_time):
-        self.name = name
-        self.clock = clock
-        self.cast_time = cast_time
-
-    def is_ready(self):
-        return self.clock.is_zero()
-
-    def process(self, caster, target):
-        pass
-
-    def is_castable(self, caster):
-        return True
-
-    def execute(self, caster, target):
-        if self.is_ready() and self.is_castable(caster):
-            self.clock.reset()
-            self.process(caster, target)
-            return True
-        return False
-
-class GCD(Skill):
-
-    def __init__(self, name, gcd_clock, cast_time=2.5):
-        super().__init__(name, gcd_clock, cast_time)
-
-class OGCD(Skill):
-
-    def __init__(self, name, cooldown):
-        super().__init__(name, Clock(0, default=cooldown), 0.75)
 
 @gcd
 class FireIV(GCD):
@@ -50,7 +17,7 @@ class FireIV(GCD):
             return True
         return False
 
-    def process(self, caster, target):
+    def process(self):
         pass
 
 @gcd
@@ -63,9 +30,9 @@ class BlizzardI(GCD):
                 cast_time = 2.5,
                 )
 
-    def process(self, caster, target):
+    def process(self):
         buff = UmbralIce(1)
-        caster.receive_buff(buff)
+        self.caster.receive_buff(buff)
 
 @ogcd
 class Enochian(OGCD):
@@ -81,9 +48,9 @@ class Enochian(OGCD):
             return True
         return False
 
-    def process(self, caster, target):
+    def process(self):
         buff = EnochianBuff()
-        target.receive_buff(buff)
+        self.target.receive_buff(buff)
 
 @ogcd
 class LeyLine(OGCD):
@@ -94,9 +61,9 @@ class LeyLine(OGCD):
                 cooldown = 90,
                 )
 
-    def process(self, caster, target):
+    def process(self):
         buff = LeyLineBuff()
-        target.receive_buff(buff)
+        self.target.receive_buff(buff)
 
 @ogcd
 class Swiftcast(OGCD):
@@ -107,6 +74,6 @@ class Swiftcast(OGCD):
                 cooldown = 60,
                 )
 
-    def process(self, caster, target):
+    def process(self):
         buff = SwiftcastBuff()
-        target.receive_buff(buff)
+        self.target.receive_buff(buff)

@@ -1,5 +1,6 @@
 from blmsim.util.time import Clock
-from blmsim.util.skilldict import GCD_dict, OGCD_dict
+from blmsim.util.skillmeta import GCD, OGCD, GCD_dict, OGCD_dict
+from blmsim.skills import *
 
 class DurationBuff:
 
@@ -119,8 +120,8 @@ class SwiftcastBuff(ChargeBuff):
                 charge = 1,
                 )
 
-    def deduct_charge_for_skill(self, skill_name):
-        if skill_name in GCD_dict:
+    def deduct_charge_for_skill(self, skill):
+        if isinstance(skill, GCD):
             self.deduct_charge()
             return True
         return False
