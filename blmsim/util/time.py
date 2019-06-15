@@ -38,9 +38,10 @@ class Time:
         return Time(ticks=self.ticks - other.ticks)
 
 class Clock(Time):
-    def __init__(self, time=0.0, ticks=None, tick_value=0.01):
+    def __init__(self, time=0.0, ticks=None, tick_value=0.01, default=0.0):
         super().__init__(time, ticks, tick_value)
         self.hooks = []
+        self.default = default
 
     def tick(self):
         for h in self.hooks:
@@ -51,7 +52,7 @@ class Clock(Time):
         self.ticks = max(self.ticks-1, 0)
 
     def reset(self):
-        self.ticks = 0
+        self.ticks = self.default
 
     def hook(self, *hook):
         self.hooks = self.hooks + list(hook)
