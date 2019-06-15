@@ -29,7 +29,7 @@ class Time:
         return self.ticks > other.ticks
 
     def __add__(self, other):
-        return Time(self.ticks + other.ticks)
+        return Time(ticks=self.ticks + other.ticks)
 
     def __eq__(self, other):
         return self.ticks == other.ticks
