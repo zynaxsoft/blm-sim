@@ -1,9 +1,8 @@
 import unittest
-from src.blmsim
+from blmsim.util.time import Clock, Time
 
 class TestSimulation(unittest.TestCase):
-
-    def test_time(self):
+    pass
 
 if __name__ == '__main__':
     unittest.main()
