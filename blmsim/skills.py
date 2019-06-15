@@ -12,7 +12,6 @@ class Skill:
 
     def execute(self):
         if self.is_ready():
-            print(f"casted {self.name}!")
             self.clock.reset()
             return True
         return False
@@ -38,4 +37,4 @@ class FireIV(GCD):
                 )
 
     def execute(self):
-        super().execute()
+        return super().execute()

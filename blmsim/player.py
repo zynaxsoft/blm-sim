@@ -1,35 +1,43 @@
 from blmsim.util.time import Clock, Time
 from blmsim.buff import DurationBuff
+from blmsim.skills import *
 
 class Player:
     def __init__(self, name, clock):
         self.name = name
         # cooldown attribute
         self.base_gcd = 2.5
-        self.gcd = Clock(0)
+        self.gcd = Clock(0, default=self.base_gcd)
         self.casting_time = Clock(0)
-        self.casting = False
+        self.casting = ''
         self.clock = clock
-        clock.hook(self)
+        self.clock.hook(self)
         # buffs
         self.buffs = []
         self.cast_time_ratio = 1
         self.gcd_ratio = 1
+        # skills
+        self.skills = {
+                'FireIV': FireIV(self.gcd)
+                }
 
-    def gcd(skill_name):
-        def gcdd(func):
-            def decorated(self):
-                message = 'what'
-                if self.gcd+self.casting_time == Time(0) and not self.casting:
-                    print(f'[{self.clock}]: {self.name} begins to cast {skill_name}!')
-                    self.casting = True
-                    func(self)
-                elif self.casting_time == Time(0) and self.casting:
-                    print(f'[{self.clock}]: {self.name} casted {skill_name}!')
-                    self.casting = False
+    def cast(self, skill_name):
+        skill = self.skills[skill_name]
+        if not self.casting:
+            self.casting = skill_name
+            print(f"[{self.clock}] {self.name} begins to cast {self.casting}.")
+            self.casting_time.set_time(skill.cast_time)
+            return skill.execute()
+        return False
 
-            return decorated
-        return gcdd
+    def on_casted(self):
+        print(f"[{self.clock}] {self.name} casted {self.casting} !")
+
+    def tock(self):
+        self.gcd.tock()
+        self.casting_time.tock()
+        if casting_time.is_zero():
+            self.on_casted()
 
     def receive_buff(self, *buff):
         for b in buff:
@@ -44,17 +52,6 @@ class Player:
     def apply_buffs(self):
         for b in self.buffs:
             b.buff()
-
-    def tock(self):
-        self.gcd.tock()
-        self.casting_time.tock()
-
-    @gcd('Fire IV')
-    def fire4(self):
-        cast_time = 2.8 * self.cast_time_ratio
-        gcd = self.base_gcd * self.gcd_ratio
-        self.casting_time.set_time(cast_time)
-        self.gcd.set_time(gcd)
 
     def leyline(self):
         buff = DurationBuff('Leyline', 5, self.clock)
