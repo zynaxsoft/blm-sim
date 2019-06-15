@@ -68,6 +68,11 @@ class TestTime(unittest.TestCase):
         clock = Clock(ticks=30)
         clock.reset()
         self.assertEqual(clock, Clock(ticks=0))
+        clock = Clock(default=10)
+        for i in range(5):
+            clock.tock()
+        clock.reset()
+        self.assertEqual(clock, Clock(10))
 
 if __name__ == '__main__':
     unittest.main()
