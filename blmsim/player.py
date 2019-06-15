@@ -32,11 +32,12 @@ class Player:
 
     def on_casted(self):
         print(f"[{self.clock}] {self.name} casted {self.casting} !")
+        self.casting = ''
 
     def tock(self):
         self.gcd.tock()
         self.casting_time.tock()
-        if casting_time.is_zero():
+        if self.casting_time.is_zero():
             self.on_casted()
 
     def receive_buff(self, *buff):
