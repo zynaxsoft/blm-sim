@@ -73,10 +73,10 @@ class Player:
         self.casting_time.tock()
 
     def receive_buff(self, buff):
-        if isinstance(buff, ChargeBuff):
+        if buff.is_charge_buff:
             self.charge_buffs.append(buff)
         for b in self.buffs:
-            if isinstance(b, type(buff)):
+            if b.name == buff.name:
                 b.renew(buff)
                 buff = b
                 break

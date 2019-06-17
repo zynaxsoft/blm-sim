@@ -7,6 +7,7 @@ class DurationBuff:
     def __init__(self, name, duration):
         self.name = name
         self.duration = Clock(default=duration)
+        self.is_charge_buff = False
 
     def is_exhausted(self):
         return self.duration.is_zero()
@@ -32,6 +33,7 @@ class ChargeBuff(DurationBuff):
         super().__init__(name, duration)
         self.charge = charge
         self.charge_limit = charge_limit
+        self.is_charge_buff = True
 
     def deduct_charge_for_skill(self, skill_name):
         pass
