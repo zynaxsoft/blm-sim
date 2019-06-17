@@ -18,9 +18,9 @@ class TestPlayer(unittest.TestCase):
         self.assertTrue(player.cast('Blizzard I'))
         self.assertTrue(player.casting)
         tick_to_complete = Clock(player.skills['Blizzard I'].cast_time).ticks
+        self.assertFalse(player.cast('Fire IV'))
         for i in range(tick_to_complete):
             clock.tick()
-            self.assertFalse(player.cast('Fire IV'))
         clock.tick()
         self.assertFalse(player.casting)
 
