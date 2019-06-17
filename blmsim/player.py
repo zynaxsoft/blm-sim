@@ -34,7 +34,7 @@ class Player:
         skill = self.skills[skill_name]
         if not self.casting and skill.is_ready():
             self.casting = skill
-            if isinstance(skill, OGCD):
+            if skill.is_ogcd:
                 self.on_cd_ogcds.append(skill)
             print("-----------------------")
             self.me(f"begins to cast {self.casting}.")
@@ -46,7 +46,7 @@ class Player:
 
     def on_casted(self):
         self.me(f"casted {self.casting} !")
-        if isinstance(self.casting, GCD):
+        if self.casting.is_gcd:
             self.casting.process()
         if len(self.charge_buffs) > 0:
             for buff in self.charge_buffs:

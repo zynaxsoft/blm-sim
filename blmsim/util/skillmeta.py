@@ -17,6 +17,8 @@ class Skill:
         self.name = name
         self.clock = clock
         self.cast_time = cast_time
+        self.is_ogcd = False
+        self.is_gcd = False
 
     def is_ready(self):
         return self.clock.is_zero()
@@ -45,11 +47,13 @@ class GCD(Skill):
 
     def __init__(self, name, gcd_clock, cast_time=2.5):
         super().__init__(name, gcd_clock, cast_time)
+        self.is_gcd = True
 
 class OGCD(Skill):
 
     def __init__(self, name, cooldown):
         super().__init__(name, Clock(0, default=cooldown), 0.75)
+        self.is_ogcd = True
 
     def execute(self, caster, target):
         executed = super().execute(caster, target)
