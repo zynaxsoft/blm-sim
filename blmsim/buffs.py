@@ -4,10 +4,12 @@ from blmsim import skillmeta
 
 class DurationBuff:
 
-    def __init__(self, name, duration):
+    def __init__(self, name, duration, buff_type='duration'):
         self.name = name
         self.duration = Clock(default=duration)
-        self.is_charge_buff = False
+        self.properties = {
+            'type': buff_type,
+            }
 
     def is_exhausted(self):
         return self.duration.is_zero()
@@ -30,10 +32,9 @@ class DurationBuff:
 class ChargeBuff(DurationBuff):
 
     def __init__(self, name, duration, charge, charge_limit=0):
-        super().__init__(name, duration)
+        super().__init__(name, duration, 'charge')
         self.charge = charge
         self.charge_limit = charge_limit
-        self.is_charge_buff = True
 
     def deduct_charge_for_skill(self, skill_name):
         pass
@@ -135,4 +136,3 @@ class SwiftcastBuff(ChargeBuff):
 
     def buff(self, target):
         target.buffed['cast_time_multiplier'] *= 0
-

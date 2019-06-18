@@ -74,7 +74,7 @@ class Player:
         self.casting_time.tock()
 
     def receive_buff(self, buff):
-        if buff.is_charge_buff:
+        if buff.properties['type'] == 'charge':
             self.charge_buffs.append(buff)
         for current_buff in self.buffs:
             if current_buff.name == buff.name:

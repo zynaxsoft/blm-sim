@@ -75,5 +75,4 @@ class Swiftcast(skillmeta.OGCD):
 
     def process(self):
         buff = buffs.SwiftcastBuff()
-        print(self.properties)
         self.properties['target'].receive_buff(buff)
