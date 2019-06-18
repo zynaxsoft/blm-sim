@@ -2,7 +2,7 @@
 from blmsim.util.time import Clock, Time
 from blmsim.player import Player
 from blmsim.util.rotation import Rotation
-from blmsim.skillmeta import GCD_dict
+from blmsim.skillmeta import GCD_DICT
 
 def main():
     """ main """
@@ -12,7 +12,7 @@ def main():
     while clock < Time(20):
         if not player.casting:
             next_skill = rotation.next()
-            if next_skill in GCD_dict:
+            if next_skill in GCD_DICT:
                 while not player.gcd.is_zero():
                     clock.tick()
                 player.cast(next_skill, player)

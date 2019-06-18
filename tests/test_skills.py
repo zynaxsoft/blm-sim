@@ -44,8 +44,8 @@ class TestSkills(unittest.TestCase):
         clock = Clock()
         player = Player('John', clock)
         player.cast('Blizzard I')
-        tick_to_complete = Clock(player.skills['Blizzard I'].cast_time).ticks
-        for i in range(tick_to_complete):
+        tick_to_complete = Clock(player.skills['Blizzard I'].properties['cast_time']).ticks
+        for _ in range(tick_to_complete):
             clock.tick()
             self.assertFalse('Umbral Ice' in player.buffs)
         clock.tick()

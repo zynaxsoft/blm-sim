@@ -35,11 +35,11 @@ class Player:
         skill = self.skills[skill_name]
         if not self.casting and skill.is_ready():
             self.casting = skill
-            if skill.is_ogcd:
+            if skill.properties['type'] == 'ogcd':
                 self.on_cd_ogcds.append(skill)
             print("-----------------------")
             self.me(f"begins to cast {self.casting}.")
-            self.casting_time.set_time(self.calc_cast_time(skill.cast_time))
+            self.casting_time.set_time(self.calc_cast_time(skill.properties['cast_time']))
             self.gcd.default = self.buffed['gcd']
             return skill.execute(self, target)
         print(f"[{self.clock}] {skill} is not yet ready !!")
@@ -47,7 +47,7 @@ class Player:
 
     def on_casted(self):
         self.me(f"casted {self.casting} !")
-        if self.casting.is_gcd:
+        if self.casting.properties['type'] == 'gcd':
             self.casting.process()
         if len(self.charge_buffs) > 0:
             for buff in self.charge_buffs:

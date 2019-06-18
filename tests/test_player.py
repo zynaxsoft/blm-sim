@@ -18,7 +18,7 @@ class TestPlayer(unittest.TestCase):
         player = Player('John', clock)
         self.assertTrue(player.cast('Blizzard I'))
         self.assertTrue(player.casting)
-        tick_to_complete = Clock(player.skills['Blizzard I'].cast_time).ticks
+        tick_to_complete = Clock(player.skills['Blizzard I'].properties['cast_time']).ticks
         self.assertFalse(player.cast('Fire IV'))
         for i in range(tick_to_complete):
             clock.tick()
@@ -30,7 +30,7 @@ class TestPlayer(unittest.TestCase):
         player = Player('John', clock)
         self.assertTrue(player.cast('Swiftcast', player))
         self.assertTrue(player.casting)
-        tick_to_complete = Clock(player.skills['Swiftcast'].cast_time).ticks
+        tick_to_complete = Clock(player.skills['Swiftcast'].properties['cast_time']).ticks
         self.assertEqual(len(player.buffs), 1)
         self.assertEqual(player.buffed['cast_time_multiplier'], 0)
         for i in range(tick_to_complete):
@@ -46,7 +46,7 @@ class TestPlayer(unittest.TestCase):
         player = Player('John', clock)
         self.assertTrue(player.cast('Blizzard I'))
         self.assertTrue(player.casting)
-        tick_to_complete = Clock(player.skills['Blizzard I'].cast_time).ticks
+        tick_to_complete = Clock(player.skills['Blizzard I'].properties['cast_time']).ticks
         for i in range(tick_to_complete):
             clock.tick()
         self.assertTrue(player.casting)
