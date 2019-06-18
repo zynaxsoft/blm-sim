@@ -59,7 +59,7 @@ class TestPlayer(unittest.TestCase):
         player.buffs.append(buffs.AstralFire(1))
         player.cast('Enochian', player)
         clock.tick()
-        for i in range(buffs.AstralFire(1).duration.ticks):
+        for _ in range(buffs.AstralFire(1).duration.ticks):
             clock.tick()
         self.assertFalse('Astral Fire' in player.buffs)
         self.assertFalse('Enochian' in player.buffs)

@@ -31,7 +31,7 @@ class BlizzardI(skillmeta.GCD):
 
     def process(self):
         buff = buffs.UmbralIce(1)
-        self.caster.receive_buff(buff)
+        self.properties['caster'].receive_buff(buff)
 
 @skillmeta.ogcd
 class Enochian(skillmeta.OGCD):
@@ -49,7 +49,7 @@ class Enochian(skillmeta.OGCD):
 
     def process(self):
         buff = buffs.EnochianBuff()
-        self.target.receive_buff(buff)
+        self.properties['target'].receive_buff(buff)
 
 @skillmeta.ogcd
 class LeyLine(skillmeta.OGCD):
@@ -62,7 +62,7 @@ class LeyLine(skillmeta.OGCD):
 
     def process(self):
         buff = buffs.LeyLineBuff()
-        self.target.receive_buff(buff)
+        self.properties['target'].receive_buff(buff)
 
 @skillmeta.ogcd
 class Swiftcast(skillmeta.OGCD):
@@ -75,4 +75,5 @@ class Swiftcast(skillmeta.OGCD):
 
     def process(self):
         buff = buffs.SwiftcastBuff()
-        self.target.receive_buff(buff)
+        print(self.properties)
+        self.properties['target'].receive_buff(buff)

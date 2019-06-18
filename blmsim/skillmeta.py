@@ -38,8 +38,8 @@ class Skill:
 
     def execute(self, caster, target):
         if self.is_ready() and self.is_castable(caster):
-            self.caster = caster
-            self.target = target
+            self.properties['caster'] = caster
+            self.properties['target'] = target
             self.clock.reset()
             return True
         return False

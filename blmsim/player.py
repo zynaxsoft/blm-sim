@@ -49,7 +49,7 @@ class Player:
         self.me(f"casted {self.casting} !")
         if self.casting.properties['type'] == 'gcd':
             self.casting.process()
-        if len(self.charge_buffs) > 0:
+        if self.charge_buffs:
             for buff in self.charge_buffs:
                 if buff.deduct_charge_for_skill(self.casting):
                     if buff.is_exhausted():
