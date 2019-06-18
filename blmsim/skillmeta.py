@@ -1,14 +1,15 @@
+""" meta for creating skills """
 from blmsim.util.time import Clock
 
-GCD_dict = {}
-OGCD_dict = {}
+GCD_DICT = {}
+OGCD_DICT = {}
 
 def gcd(cls):
-    GCD_dict.update({cls(None).name: cls})
+    GCD_DICT.update({cls(None).name: cls})
     return cls
 
 def ogcd(cls):
-    OGCD_dict.update({cls().name: cls})
+    OGCD_DICT.update({cls().name: cls})
     return cls
 
 class Skill:

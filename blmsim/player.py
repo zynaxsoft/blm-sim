@@ -1,6 +1,6 @@
 """ Player related stuffs """
 from blmsim.util.time import Clock
-from blmsim.skillmeta import GCD_dict, OGCD_dict
+from blmsim.skillmeta import GCD_DICT, OGCD_DICT
 
 class Player:
     """ Player class """
@@ -22,9 +22,9 @@ class Player:
         self.clock.hook(self)
         # skills
         self.skills = {}
-        for k, skill in GCD_dict.items():
+        for k, skill in GCD_DICT.items():
             self.skills[k] = skill(self.gcd)
-        for k, skill in OGCD_dict.items():
+        for k, skill in OGCD_DICT.items():
             self.skills[k] = skill()
         self.on_cd_ogcds = []
 
