@@ -1,5 +1,5 @@
 from blmsim.util.time import Clock, Time
-from blmsim.util.skillmeta import Skill, GCD, OGCD, gcd, ogcd
+from blmsim.skillmeta import GCD, OGCD, gcd, ogcd
 from blmsim.buffs import *
 
 @gcd

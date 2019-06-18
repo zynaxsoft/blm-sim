@@ -1,15 +1,16 @@
-from blmsim.util.time import Clock, Time
-from blmsim.skills import *
-from blmsim.util.skillmeta import GCD_dict, OGCD_dict
+""" Player related stuffs """
+from blmsim.util.time import Clock
+from blmsim.skillmeta import GCD_dict, OGCD_dict
 
 class Player:
+    """ Player class """
     def __init__(self, name, clock):
         self.name = name
         # stats
         self.base = {
-                'gcd': 2.5,
-                'cast_time_multiplier': 1,
-                }
+            'gcd': 2.5,
+            'cast_time_multiplier': 1,
+            }
         self.buffed = dict(self.base)
         self.buffs = []
         self.charge_buffs = []
@@ -21,10 +22,10 @@ class Player:
         self.clock.hook(self)
         # skills
         self.skills = {}
-        for k, v in GCD_dict.items():
-            self.skills[k] = v(self.gcd)
-        for k, v in OGCD_dict.items():
-            self.skills[k] = v()
+        for k, skill in GCD_dict.items():
+            self.skills[k] = skill(self.gcd)
+        for k, skill in OGCD_dict.items():
+            self.skills[k] = skill()
         self.on_cd_ogcds = []
 
     def calc_cast_time(self, cast_time):
@@ -75,10 +76,10 @@ class Player:
     def receive_buff(self, buff):
         if buff.is_charge_buff:
             self.charge_buffs.append(buff)
-        for b in self.buffs:
-            if b.name == buff.name:
-                b.renew(buff)
-                buff = b
+        for current_buff in self.buffs:
+            if current_buff.name == buff.name:
+                current_buff.renew(buff)
+                buff = current_buff
                 break
                 #self.me(f"already has {buff}. The buff's duration is renewed")
         else:
@@ -100,8 +101,8 @@ class Player:
 
     def apply_buffs(self):
         self.buffed = dict(self.base)
-        for b in self.buffs:
-            b.buff(self)
+        for current_buff in self.buffs:
+            current_buff.buff(self)
 
     def me(self, text):
         print(f"[{self.clock}] {self.name} {text}")

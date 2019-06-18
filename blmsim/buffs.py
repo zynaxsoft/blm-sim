@@ -1,5 +1,5 @@
 from blmsim.util.time import Clock
-from blmsim.util.skillmeta import GCD, OGCD, GCD_dict, OGCD_dict
+from blmsim.skillmeta import GCD, OGCD, GCD_dict, OGCD_dict
 from blmsim.skills import *
 
 class DurationBuff:
