@@ -1,16 +1,15 @@
-from blmsim.util.time import Clock, Time
-from blmsim.skillmeta import GCD, OGCD, gcd, ogcd
-from blmsim.buffs import *
+""" skills related classes """
+from blmsim import skillmeta, buffs
 
-@gcd
-class FireIV(GCD):
+@skillmeta.gcd
+class FireIV(skillmeta.GCD):
 
     def __init__(self, gcd_clock):
         super().__init__(
-                name = 'Fire IV',
-                gcd_clock = gcd_clock,
-                cast_time = 2.8,
-                )
+            name='Fire IV',
+            gcd_clock=gcd_clock,
+            cast_time=2.8,
+            )
 
     def is_castable(self, caster):
         if 'Enochian' in caster.buffs:
@@ -20,28 +19,28 @@ class FireIV(GCD):
     def process(self):
         pass
 
-@gcd
-class BlizzardI(GCD):
+@skillmeta.gcd
+class BlizzardI(skillmeta.GCD):
 
     def __init__(self, gcd_clock):
         super().__init__(
-                name = 'Blizzard I',
-                gcd_clock = gcd_clock,
-                cast_time = 2.5,
-                )
+            name='Blizzard I',
+            gcd_clock=gcd_clock,
+            cast_time=2.5,
+            )
 
     def process(self):
-        buff = UmbralIce(1)
+        buff = buffs.UmbralIce(1)
         self.caster.receive_buff(buff)
 
-@ogcd
-class Enochian(OGCD):
+@skillmeta.ogcd
+class Enochian(skillmeta.OGCD):
 
     def __init__(self):
         super().__init__(
-                name = 'Enochian',
-                cooldown = 30,
-                )
+            name='Enochian',
+            cooldown=30,
+            )
 
     def is_castable(self, caster):
         if 'Astral or Umbral' in caster.buffs:
@@ -49,31 +48,31 @@ class Enochian(OGCD):
         return False
 
     def process(self):
-        buff = EnochianBuff()
+        buff = buffs.EnochianBuff()
         self.target.receive_buff(buff)
 
-@ogcd
-class LeyLine(OGCD):
+@skillmeta.ogcd
+class LeyLine(skillmeta.OGCD):
 
     def __init__(self):
         super().__init__(
-                name = 'Ley Line',
-                cooldown = 90,
-                )
+            name='Ley Line',
+            cooldown=90,
+            )
 
     def process(self):
-        buff = LeyLineBuff()
+        buff = buffs.LeyLineBuff()
         self.target.receive_buff(buff)
 
-@ogcd
-class Swiftcast(OGCD):
+@skillmeta.ogcd
+class Swiftcast(skillmeta.OGCD):
 
     def __init__(self):
         super().__init__(
-                name = 'Swiftcast',
-                cooldown = 60,
-                )
+            name='Swiftcast',
+            cooldown=60,
+            )
 
     def process(self):
-        buff = SwiftcastBuff()
+        buff = buffs.SwiftcastBuff()
         self.target.receive_buff(buff)

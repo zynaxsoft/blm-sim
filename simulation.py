@@ -2,7 +2,7 @@
 from blmsim.util.time import Clock, Time
 from blmsim.player import Player
 from blmsim.util.rotation import Rotation
-from blmsim.util.skillmeta import GCD_dict
+from blmsim.skillmeta import GCD_dict
 
 def main():
     """ main """

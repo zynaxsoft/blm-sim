@@ -1,6 +1,6 @@
+""" Buff related classes """
 from blmsim.util.time import Clock
-from blmsim.skillmeta import GCD, OGCD, GCD_dict, OGCD_dict
-from blmsim.skills import *
+from blmsim import skillmeta
 
 class DurationBuff:
 
@@ -53,9 +53,9 @@ class EnochianBuff(DurationBuff):
 
     def __init__(self):
         super().__init__(
-                name = 'Enochian',
-                duration = 0,
-                )
+            name='Enochian',
+            duration=0,
+            )
         self.exhausted = False
 
     def is_exhausted(self):
@@ -68,9 +68,9 @@ class AstralUmbral(DurationBuff):
 
     def __init__(self, name, stack):
         super().__init__(
-                name,
-                duration = 15,
-                )
+            name,
+            duration=15,
+            )
         self.stack = stack
         self.max_stack = 3
 
@@ -85,9 +85,9 @@ class AstralUmbral(DurationBuff):
         return f"{self.name} {'I'*self.stack}"
 
     def __eq__(self, other):
-        compare = self.name == str(other)
-        compare = compare or str(self) == str(other)
-        compare = compare or 'Astral or Umbral' == str(other)
+        compare = str(other) == self.name
+        compare = compare or str(other) == str(self)
+        compare = compare or str(other) == 'Astral or Umbral'
         return compare
 
 class AstralFire(AstralUmbral):
@@ -110,9 +110,9 @@ class LeyLineBuff(DurationBuff):
 
     def __init__(self):
         super().__init__(
-                name = 'Ley Line Buff',
-                duration = 30,
-                )
+            name='Ley Line Buff',
+            duration=30,
+            )
 
     def buff(self, target):
         target.buffed['cast_time_multiplier'] *= 0.85
@@ -122,13 +122,13 @@ class SwiftcastBuff(ChargeBuff):
 
     def __init__(self):
         super().__init__(
-                name = 'Swiftcast Buff',
-                duration = 10,
-                charge = 1,
-                )
+            name='Swiftcast Buff',
+            duration=10,
+            charge=1,
+            )
 
     def deduct_charge_for_skill(self, skill):
-        if isinstance(skill, GCD):
+        if isinstance(skill, skillmeta.GCD):
             self.deduct_charge()
             return True
         return False

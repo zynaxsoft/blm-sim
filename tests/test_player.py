@@ -1,6 +1,7 @@
+""" Test player related stuffs """
 import unittest
-from blmsim.util.time import Clock, Time
-from blmsim.skills import *
+from blmsim import buffs
+from blmsim.util.time import Clock
 from blmsim.player import Player
 
 class TestPlayer(unittest.TestCase):
@@ -8,7 +9,7 @@ class TestPlayer(unittest.TestCase):
     def test_player_executing_fireIV(self):
         clock = Clock()
         player = Player('John', clock)
-        player.buffs.append(EnochianBuff())
+        player.buffs.append(buffs.EnochianBuff())
         self.assertTrue(player.cast('Fire IV'))
         self.assertFalse(player.cast('Fire IV'))
 
@@ -55,10 +56,10 @@ class TestPlayer(unittest.TestCase):
     def test_player_enochian_validity(self):
         clock = Clock()
         player = Player('John', clock)
-        player.buffs.append(AstralFire(1))
+        player.buffs.append(buffs.AstralFire(1))
         player.cast('Enochian', player)
         clock.tick()
-        for i in range(AstralFire(1).duration.ticks):
+        for i in range(buffs.AstralFire(1).duration.ticks):
             clock.tick()
         self.assertFalse('Astral Fire' in player.buffs)
         self.assertFalse('Enochian' in player.buffs)

@@ -1,43 +1,44 @@
+""" _assertion of time """
 import unittest
 from blmsim.util.time import Clock, Time
 
 class TestTime(unittest.TestCase):
 
     def test_time_comparing_equal(self):
-        timeA = Time(30)
-        timeB = Time(30)
-        self.assertEqual(timeA, timeB)
+        time_a = Time(30)
+        time_b = Time(30)
+        self.assertEqual(time_a, time_b)
 
     def test_time_comparing_not_equal(self):
-        timeA = Time(30)
-        timeB = Time(40)
-        self.assertNotEqual(timeA, timeB)
+        time_a = Time(30)
+        time_b = Time(40)
+        self.assertNotEqual(time_a, time_b)
 
     def test_time_comparing_greater_lesser(self):
-        timeA = Time(30)
-        timeB = Time(40)
-        self.assertGreater(timeB, timeA)
-        self.assertLess(timeA, timeB)
+        time_a = Time(30)
+        time_b = Time(40)
+        self.assertGreater(time_b, time_a)
+        self.assertLess(time_a, time_b)
 
     def test_time_adding(self):
-        timeA = Time(30)
-        timeB = Time(40)
-        tickA = timeA.ticks
-        tickB = timeB.ticks
-        self.assertEqual(timeA + timeB, Time(ticks=tickA + tickB))
+        time_a = Time(30)
+        time_b = Time(40)
+        tick_a = time_a.ticks
+        tick_b = time_b.ticks
+        self.assertEqual(time_a + time_b, Time(ticks=tick_a + tick_b))
 
     def test_time_subtracting(self):
-        timeA = Time(30)
-        timeB = Time(40)
-        tickA = timeA.ticks
-        tickB = timeB.ticks
-        self.assertEqual(timeB - timeA, Time(ticks=tickB - tickA))
+        time_a = Time(30)
+        time_b = Time(40)
+        tick_a = time_a.ticks
+        tick_b = time_b.ticks
+        self.assertEqual(time_b - time_a, Time(ticks=tick_b - tick_a))
 
     def test_time_is_zero(self):
-        timeA = Time(0)
-        timeB = Time(1)
-        self.assertTrue(timeA.is_zero())
-        self.assertFalse(timeB.is_zero())
+        time_a = Time(0)
+        time_b = Time(1)
+        self.assertTrue(time_a.is_zero())
+        self.assertFalse(time_b.is_zero())
 
     def test_clock_hook(self):
         class TestHook:
@@ -69,7 +70,7 @@ class TestTime(unittest.TestCase):
         clock.reset()
         self.assertEqual(clock, Clock(ticks=0))
         clock = Clock(default=10)
-        for i in range(5):
+        for _ in range(5):
             clock.tock()
         clock.reset()
         self.assertEqual(clock, Clock(10))

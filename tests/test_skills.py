@@ -1,13 +1,14 @@
+""" Test usage of skills """
 import unittest
-from blmsim.util.time import Clock, Time
-from blmsim.skills import *
+from blmsim import skills, skillmeta
+from blmsim.util.time import Clock
 from blmsim.player import Player
 
 class TestSkills(unittest.TestCase):
 
     def test_skill_gcd(self):
         gcd_clock = Clock(default=2.5)
-        gcd_skill = GCD('FIRE TEN', gcd_clock, cast_time=2.8)
+        gcd_skill = skillmeta.GCD('FIRE TEN', gcd_clock, cast_time=2.8)
         gcd_clock.set_time(1)
         self.assertFalse(gcd_skill.execute(None, None))
         gcd_clock.set_time(0)
@@ -15,14 +16,14 @@ class TestSkills(unittest.TestCase):
         self.assertEqual(gcd_clock, Clock(2.5))
 
     def test_skill_ogcd(self):
-        skill = OGCD('OGCD', cooldown=5)
+        skill = skillmeta.OGCD('OGCD', cooldown=5)
         self.assertTrue(skill.execute(None, None))
         self.assertFalse(skill.execute(None, None))
         skill.clock.set_time(0)
         self.assertTrue(skill.execute(None, None))
 
     def test_skill_ley_line(self):
-        skill = LeyLine()
+        skill = skills.LeyLine()
         clock = Clock()
         player = Player('John', clock)
         self.assertTrue(skill.execute(player, player))
@@ -31,7 +32,7 @@ class TestSkills(unittest.TestCase):
         self.assertNotEqual(player.buffed['gcd'], player.base['gcd'])
 
     def test_skill_swiftcast(self):
-        skill = Swiftcast()
+        skill = skills.Swiftcast()
         clock = Clock()
         player = Player('John', clock)
         self.assertTrue(skill.execute(player, player))
