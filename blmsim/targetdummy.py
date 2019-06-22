@@ -33,3 +33,4 @@ class TargetObserver:
         total_potency = 0
         for dummy in self.dummies:
             total_potency += dummy.potency_taken
+        return total_potency
