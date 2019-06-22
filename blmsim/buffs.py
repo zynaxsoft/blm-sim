@@ -42,6 +42,10 @@ class ChargeBuff(DurationBuff):
     def gain_charge(self):
         self.charge = min(self.charge_limit, self.charge+1)
 
+    def renew(self, new):
+        super().renew(new)
+        self.charge = new.charge
+
     def deduct_charge(self):
         self.charge = max(0, self.charge-1)
 
@@ -63,6 +67,23 @@ class EnochianBuff(DurationBuff):
         return self.exhausted
 
     def buff(self, target):
+        pass
+
+class Polyglot(ChargeBuff):
+
+    def __init__(self):
+        super().__init__(
+            name='Polyglot',
+            duration=0,
+            charge=0,
+            charge_limit=1,
+            )
+        self.exhausted = False
+
+    def is_exhausted(self):
+        return self.exhausted
+
+    def renew(self, new):
         pass
 
 class AstralUmbral(DurationBuff):

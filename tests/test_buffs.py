@@ -2,6 +2,7 @@
 import unittest
 
 from blmsim import buffs
+from blmsim.util.time import Clock
 
 class TestBuffs(unittest.TestCase):
 
@@ -20,6 +21,22 @@ class TestBuffs(unittest.TestCase):
         self.assertTrue('Astral or Umbral' in a_list)
         self.assertTrue('Astral or Umbral' in u_list)
 
+    def test_buff_polyglot_no_expire_max_charge(self):
+        polyglot = buffs.Polyglot()
+        polyglot.duration = Clock(0)
+        self.assertFalse(polyglot.is_exhausted())
+        self.assertEqual(polyglot.charge, 0)
+        polyglot.gain_charge()
+        self.assertEqual(polyglot.charge, 1)
+        polyglot.gain_charge()
+        self.assertEqual(polyglot.charge, 1)
+        polyglot.renew(polyglot)
+        self.assertEqual(polyglot.charge, 1)
+
+    def test_buff_enochian_no_exipire(self):
+        enochian = buffs.EnochianBuff()
+        enochian.duration = Clock(0)
+        self.assertFalse(enochian.is_exhausted())
 
 if __name__ == '__main__':
     unittest.main()
