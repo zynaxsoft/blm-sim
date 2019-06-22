@@ -1,8 +1,10 @@
 """ Test usage of skills """
 import unittest
+
 from blmsim import skills, skillmeta
-from blmsim.util.time import Clock
 from blmsim.player import Player
+from blmsim.targetdummy import TargetDummy
+from blmsim.util.time import Clock
 
 class TestSkills(unittest.TestCase):
 
@@ -43,7 +45,8 @@ class TestSkills(unittest.TestCase):
     def test_skill_apply_buff_after_gcd_casted(self):
         clock = Clock()
         player = Player('John', clock)
-        player.cast('Blizzard I')
+        dummy = TargetDummy()
+        player.cast('Blizzard I', dummy)
         tick_to_complete = Clock(player.skills['Blizzard I'].properties['cast_time']).ticks
         for _ in range(tick_to_complete):
             clock.tick()

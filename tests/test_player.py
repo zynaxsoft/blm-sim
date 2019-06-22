@@ -1,8 +1,10 @@
 """ Test player related stuffs """
 import unittest
+
 from blmsim import buffs
-from blmsim.util.time import Clock
 from blmsim.player import Player
+from blmsim.targetdummy import TargetDummy
+from blmsim.util.time import Clock
 
 class TestPlayer(unittest.TestCase):
 
@@ -10,16 +12,18 @@ class TestPlayer(unittest.TestCase):
         clock = Clock()
         player = Player('John', clock)
         player.buffs.append(buffs.EnochianBuff())
-        self.assertTrue(player.cast('Fire IV'))
-        self.assertFalse(player.cast('Fire IV'))
+        dummy = TargetDummy()
+        self.assertTrue(player.cast('Fire IV', dummy))
+        self.assertFalse(player.cast('Fire IV', dummy))
 
     def test_player_casting_status(self):
         clock = Clock()
         player = Player('John', clock)
-        self.assertTrue(player.cast('Blizzard I'))
+        dummy = TargetDummy()
+        self.assertTrue(player.cast('Blizzard I', dummy))
         self.assertTrue(player.casting)
         tick_to_complete = Clock(player.skills['Blizzard I'].properties['cast_time']).ticks
-        self.assertFalse(player.cast('Fire IV'))
+        self.assertFalse(player.cast('Fire IV', dummy))
         for i in range(tick_to_complete):
             clock.tick()
         clock.tick()
@@ -28,6 +32,7 @@ class TestPlayer(unittest.TestCase):
     def test_player_use_swiftcast(self):
         clock = Clock()
         player = Player('John', clock)
+        dummy = TargetDummy()
         self.assertTrue(player.cast('Swiftcast', player))
         self.assertTrue(player.casting)
         tick_to_complete = Clock(player.skills['Swiftcast'].properties['cast_time']).ticks
@@ -36,7 +41,7 @@ class TestPlayer(unittest.TestCase):
         for i in range(tick_to_complete):
             clock.tick()
         clock.tick()
-        player.cast('Blizzard I')
+        player.cast('Blizzard I', dummy)
         clock.tick() # trigger cast Blizzard I
         self.assertFalse('Swiftcast' in player.buffs)
         self.assertNotEqual(player.buffed['cast_time_multiplier'], 0)
@@ -44,7 +49,8 @@ class TestPlayer(unittest.TestCase):
     def test_player_gcd(self):
         clock = Clock()
         player = Player('John', clock)
-        self.assertTrue(player.cast('Blizzard I'))
+        dummy = TargetDummy()
+        self.assertTrue(player.cast('Blizzard I', dummy))
         self.assertTrue(player.casting)
         tick_to_complete = Clock(player.skills['Blizzard I'].properties['cast_time']).ticks
         for i in range(tick_to_complete):

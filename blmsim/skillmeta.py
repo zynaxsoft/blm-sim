@@ -17,10 +17,10 @@ class Skill:
     def __init__(self, name, clock, cast_time, skill_type=''):
         self.name = name
         self.clock = clock
+        self.caster = None
+        self.target = None
         self.properties = {
             'type': skill_type,
-            'caster': None,
-            'target': None,
             'cast_time': cast_time,
             }
 
@@ -38,8 +38,8 @@ class Skill:
 
     def execute(self, caster, target):
         if self.is_ready() and self.is_castable(caster):
-            self.properties['caster'] = caster
-            self.properties['target'] = target
+            self.caster = caster
+            self.target = target
             self.clock.reset()
             return True
         return False

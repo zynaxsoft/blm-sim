@@ -11,6 +11,7 @@ class Player:
         self.base = {
             'gcd': 2.5,
             'cast_time_multiplier': 1,
+            'damage_modifier': 1,
             }
         self.buffed = dict(self.base)
         self.buffs = []
