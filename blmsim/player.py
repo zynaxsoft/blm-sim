@@ -1,6 +1,7 @@
 """ Player related stuffs """
-from blmsim.util.time import Clock
+from blmsim import skills
 from blmsim.skillmeta import GCD_DICT, OGCD_DICT
+from blmsim.util.time import Clock
 
 class Player:
     """ Player class """
