@@ -14,7 +14,7 @@ class Player:
             'damage_modifier': 1,
             }
         self.buffed = dict(self.base)
-        self.buffs = []
+        self.buffs = {}
         self.charge_buffs = []
         # cooldown attribute
         self.gcd = Clock(0, default=self.base['gcd'])
@@ -41,7 +41,8 @@ class Player:
                 self.on_cd_ogcds.append(skill)
             print("-----------------------")
             self.me(f"begins to cast {self.casting}.")
-            self.casting_time.set_time(self.calc_cast_time(skill.properties['cast_time']))
+            self.casting_time.set_time(
+                self.calc_cast_time(skill.properties['cast_time']))
             self.gcd.default = self.buffed['gcd']
             return skill.execute(self, target)
         print(f"[{self.clock}] {skill} is not yet ready !!")
@@ -54,6 +55,7 @@ class Player:
         if self.charge_buffs:
             for buff in self.charge_buffs:
                 if buff.deduct_charge_for_skill(self.casting):
+                    self.me(f'loses 1 charge of {buff}')
                     if buff.is_exhausted():
                         self.charge_buffs.remove(buff)
                         self.remove_buff(buff)
@@ -65,7 +67,7 @@ class Player:
             if ogcd.clock.is_zero():
                 self.on_cd_ogcds.remove(ogcd)
             ogcd.clock.tock()
-        for buff in self.buffs:
+        for buff in list(self.buffs.values()):
             if buff.is_exhausted():
                 self.remove_buff(buff)
             buff.duration.tock()
@@ -78,32 +80,36 @@ class Player:
     def receive_buff(self, buff):
         if buff.properties['type'] == 'charge':
             self.charge_buffs.append(buff)
-        for current_buff in self.buffs:
-            if current_buff.name == buff.name:
-                current_buff.renew(buff)
-                buff = current_buff
-                break
-                #self.me(f"already has {buff}. The buff's duration is renewed")
+        if buff.name in self.buffs:
+            self.buffs[buff.name].renew(buff)
+            buff = self.buffs[buff.name]
         else:
-            self.buffs.append(buff)
+            self.buffs[buff.name] = buff
         self.apply_buffs()
         self.me(f"received {buff} !")
 
     def check_enochian(self):
         if 'Enochian' in self.buffs:
-            if 'Astral or Umbral' in self.buffs:
+            if 'Polyglot' in self.buffs:
+                polyglot = self.buffs['Polyglot']
+                if polyglot.gain_charge_timer.is_zero():
+                    polyglot.gain_charge()
+                    polyglot.gain_charge_timer.reset()
+                else:
+                    polyglot.gain_charge_timer.tock()
+            if 'Astral or Umbral' in self.buffs.values():
                 return True
-            self.buffs.remove('Enochian')
+            self.buffs.pop('Enochian')
         return False
 
     def remove_buff(self, buff):
         self.me(f"loses {buff}.")
-        self.buffs.remove(buff)
+        self.buffs.pop(buff.name)
         self.apply_buffs()
 
     def apply_buffs(self):
         self.buffed = dict(self.base)
-        for current_buff in self.buffs:
+        for current_buff in self.buffs.values():
             current_buff.buff(self)
 
     def me(self, text):

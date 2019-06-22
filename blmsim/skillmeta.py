@@ -71,7 +71,7 @@ class OGCD(Skill):
 
 class BuffSkill(Skill):
 
-    def give_buffs(self, buff):
+    def give_buff(self, buff):
         for target in self.targets:
             target.receive_buff(buff)
 

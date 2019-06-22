@@ -35,9 +35,13 @@ class ChargeBuff(DurationBuff):
         super().__init__(name, duration, 'charge')
         self.charge = charge
         self.charge_limit = charge_limit
+        self.skills_that_reduces_charge = []
 
-    def deduct_charge_for_skill(self, skill_name):
-        pass
+    def deduct_charge_for_skill(self, skill):
+        if skill.name in self.skills_that_reduces_charge:
+            self.deduct_charge()
+            return True
+        return False
 
     def gain_charge(self):
         self.charge = min(self.charge_limit, self.charge+1)
@@ -79,6 +83,8 @@ class Polyglot(ChargeBuff):
             charge_limit=1,
             )
         self.exhausted = False
+        self.gain_charge_timer = Clock(default=30)
+        self.skills_that_reduces_charge = ['Foul']
 
     def is_exhausted(self):
         return self.exhausted
@@ -148,12 +154,7 @@ class SwiftcastBuff(ChargeBuff):
             duration=10,
             charge=1,
             )
-
-    def deduct_charge_for_skill(self, skill):
-        if isinstance(skill, skillmeta.GCD):
-            self.deduct_charge()
-            return True
-        return False
+        self.skills_that_reduces_charge = list(skillmeta.GCD_DICT)
 
     def buff(self, target):
         target.buffed['cast_time_multiplier'] *= 0
