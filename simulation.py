@@ -1,8 +1,9 @@
 """ BLM Simulation """
-from blmsim.util.time import Clock, Time
 from blmsim.player import Player
-from blmsim.util.rotation import Rotation
 from blmsim.skillmeta import GCD_DICT
+from blmsim.util.rotation import Rotation
+from blmsim.util.time import Clock, Time
+
 
 def main():
     """ main """
@@ -20,6 +21,7 @@ def main():
                 if player.skills[next_skill].clock.is_zero():
                     player.cast(next_skill, player)
         clock.tick()
+
 
 if __name__ == '__main__':
     main()
