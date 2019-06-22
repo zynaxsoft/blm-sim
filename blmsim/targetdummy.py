@@ -15,7 +15,7 @@ class TargetDummy:
     def take_potency(self, potency):
         self.potency_taken += potency
 
-class DummyObserver:
+class TargetObserver:
 
     def __init__(self):
         self.dummies = []
@@ -23,10 +23,13 @@ class DummyObserver:
     def eyes_on(self, dummy):
         self.dummies.append(dummy)
 
-    def observe_damage_taken(self):
+    def observe_total_damage_taken(self):
+        total_damage = 0
         for dummy in self.dummies:
-            print(dummy.damage_taken)
+            total_damage += dummy.damage_taken
+        return total_damage
 
-    def observe_potency_taken(self):
+    def observe_total_potency_taken(self):
+        total_potency = 0
         for dummy in self.dummies:
-            print(dummy.potency_taken)
+            total_potency += dummy.potency_taken
