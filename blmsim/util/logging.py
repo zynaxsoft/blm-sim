@@ -15,9 +15,8 @@ class BLMLog:
         self.name = name
         # self.path = os.path.join(blmsim.LOG_DIR, f'{self.name}')
         self.logger = logging.getLogger(self.name)
-        log_format = logging.Formatter('s:%(levelname)s:%(message)s')
         self.stream_handler = logging.StreamHandler()
-        self.stream_handler.setFormatter(log_format)
+        self.stream_handler.setFormatter(BLMFormatter())
         self.logger.addHandler(self.stream_handler)
         self.set_verbosity(verbosity)
         self.logger.setLevel(logging.DEBUG)
@@ -26,5 +25,19 @@ class BLMLog:
         log_level = max(0, logging.INFO - logging.DEBUG*verbosity)
         self.stream_handler.setLevel(log_level)
 
+class BLMFormatter(logging.Formatter):
 
-BLMLOG = BLMLog('blmlog')
+    FORMATS = {
+        logging.INFO: '{message}',
+        'default': '[{levelname}]: {message}',
+        }
+
+    def __init__(self):
+        super().__init__('', style='{')
+
+    def format(self, record):
+        self._fmt = self.FORMATS.get(record.levelno, self.FORMATS['default'])
+        self._style = logging.StrFormatStyle(self._fmt)
+        return super().format(record)
+
+BLMLOG = BLMLog('blmlog').logger

@@ -2,6 +2,7 @@
 from blmsim import skills
 from blmsim.skillmeta import GCD_DICT, OGCD_DICT
 from blmsim.util.time import Clock
+from blmsim.util.logging import BLMLOG
 
 class Player:
     """ Player class """
@@ -39,7 +40,7 @@ class Player:
             self.casting = skill
             if skill.properties['type'] == 'ogcd':
                 self.on_cd_ogcds.append(skill)
-            print("-----------------------")
+            BLMLOG.info("-----------------------")
             self.me(f"begins to cast {self.casting}.")
             self.casting_time.set_time(
                 self.calc_cast_time(skill.properties['cast_time']))
@@ -113,4 +114,4 @@ class Player:
             current_buff.buff(self)
 
     def me(self, text):
-        print(f"[{self.clock}] {self.name} {text}")
+        BLMLOG.info(f"[{self.clock}] {self.name} {text}")
