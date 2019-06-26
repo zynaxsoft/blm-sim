@@ -7,22 +7,22 @@ from blmsim.util.time import Clock
 class TestBuffs(unittest.TestCase):
 
     def test_buff_check_member_astral_umbral(self):
-        a_list = [buffs.AstralFire(1),
-                  buffs.AstralFire(2),
-                  buffs.AstralFire(3)]
-        u_list = [buffs.UmbralIce(1),
-                  buffs.UmbralIce(2),
-                  buffs.UmbralIce(3)]
+        a_list = [buffs.AstralFireBuff(1),
+                  buffs.AstralFireBuff(2),
+                  buffs.AstralFireBuff(3)]
+        u_list = [buffs.UmbralIceBuff(1),
+                  buffs.UmbralIceBuff(2),
+                  buffs.UmbralIceBuff(3)]
         for i in range(1, 4):
-            self.assertTrue(buffs.AstralFire(i) in a_list)
-            self.assertFalse(buffs.AstralFire(i) in u_list)
-            self.assertTrue(buffs.UmbralIce(i) in u_list)
-            self.assertFalse(buffs.UmbralIce(i) in a_list)
+            self.assertTrue(buffs.AstralFireBuff(i) in a_list)
+            self.assertFalse(buffs.AstralFireBuff(i) in u_list)
+            self.assertTrue(buffs.UmbralIceBuff(i) in u_list)
+            self.assertFalse(buffs.UmbralIceBuff(i) in a_list)
         self.assertTrue('Astral or Umbral' in a_list)
         self.assertTrue('Astral or Umbral' in u_list)
 
     def test_buff_polyglot_no_expire_max_charge(self):
-        polyglot = buffs.Polyglot()
+        polyglot = buffs.PolyglotBuff()
         polyglot.duration = Clock(0)
         self.assertFalse(polyglot.is_exhausted())
         self.assertEqual(polyglot.charge, 0)

@@ -4,12 +4,9 @@ from blmsim import skillmeta
 
 class DurationBuff:
 
-    def __init__(self, name, duration, buff_type='duration'):
+    def __init__(self, name, duration):
         self.name = name
         self.duration = Clock(default=duration)
-        self.properties = {
-            'type': buff_type,
-            }
 
     def is_exhausted(self):
         return self.duration.is_zero()
@@ -32,7 +29,7 @@ class DurationBuff:
 class ChargeBuff(DurationBuff):
 
     def __init__(self, name, duration, charge, charge_limit=0):
-        super().__init__(name, duration, 'charge')
+        super().__init__(name, duration)
         self.charge = charge
         self.charge_limit = charge_limit
         self.skills_that_reduces_charge = []
@@ -73,7 +70,7 @@ class EnochianBuff(DurationBuff):
     def buff(self, target):
         pass
 
-class Polyglot(ChargeBuff):
+class PolyglotBuff(ChargeBuff):
 
     def __init__(self):
         super().__init__(
@@ -92,7 +89,7 @@ class Polyglot(ChargeBuff):
     def renew(self, new):
         pass
 
-class AstralUmbral(DurationBuff):
+class AstralUmbralBuff(DurationBuff):
 
     def __init__(self, name, stack):
         super().__init__(
@@ -118,7 +115,7 @@ class AstralUmbral(DurationBuff):
         compare = compare or str(other) == 'Astral or Umbral'
         return compare
 
-class AstralFire(AstralUmbral):
+class AstralFireBuff(AstralUmbralBuff):
 
     def __init__(self, stack):
         super().__init__('Astral Fire', stack)
@@ -126,7 +123,7 @@ class AstralFire(AstralUmbral):
     def buff(self, target):
         pass
 
-class UmbralIce(AstralUmbral):
+class UmbralIceBuff(AstralUmbralBuff):
 
     def __init__(self, stack):
         super().__init__('Umbral Ice', stack)

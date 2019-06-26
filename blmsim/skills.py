@@ -2,7 +2,7 @@
 from blmsim import skillmeta, buffs
 
 @skillmeta.gcd
-class FireIV(skillmeta.GCD, skillmeta.DamageSkill):
+class FireIV(skillmeta.GCD):
 
     def __init__(self, gcd_clock):
         super().__init__(
@@ -17,10 +17,10 @@ class FireIV(skillmeta.GCD, skillmeta.DamageSkill):
         return False
 
     def process(self):
-        self.do_damage(300)
+        skillmeta.do_damage(self, 300)
 
 @skillmeta.gcd
-class Foul(skillmeta.GCD, skillmeta.DamageSkill):
+class Foul(skillmeta.GCD):
 
     def __init__(self, gcd_clock):
         super().__init__(
@@ -35,10 +35,10 @@ class Foul(skillmeta.GCD, skillmeta.DamageSkill):
         return False
 
     def process(self):
-        self.do_damage(500)
+        skillmeta.do_damage(self, 500)
 
 @skillmeta.gcd
-class BlizzardI(skillmeta.GCD, skillmeta.DamageSkill):
+class BlizzardI(skillmeta.GCD):
 
     def __init__(self, gcd_clock):
         super().__init__(
@@ -47,12 +47,12 @@ class BlizzardI(skillmeta.GCD, skillmeta.DamageSkill):
             )
 
     def process(self):
-        buff = buffs.UmbralIce(1)
-        self.caster.receive_buff(buff)
-        self.do_damage(120)
+        self.caster.receive_buff(buffs.UmbralIceBuff(1))
+        skillmeta.do_damage(self, 120)
+
 
 @skillmeta.ogcd
-class Enochian(skillmeta.OGCD, skillmeta.BuffSkill):
+class Enochian(skillmeta.OGCD):
 
     def __init__(self):
         super().__init__(
@@ -66,13 +66,11 @@ class Enochian(skillmeta.OGCD, skillmeta.BuffSkill):
         return False
 
     def process(self):
-        buff = buffs.EnochianBuff()
-        self.give_buff(buff)
-        buff = buffs.Polyglot()
-        self.give_buff(buff)
+        self.caster.receive_buff(buffs.EnochianBuff())
+        self.caster.receive_buff(buffs.PolyglotBuff())
 
 @skillmeta.ogcd
-class LeyLine(skillmeta.OGCD, skillmeta.BuffSkill):
+class LeyLine(skillmeta.OGCD):
 
     def __init__(self):
         super().__init__(
@@ -81,11 +79,10 @@ class LeyLine(skillmeta.OGCD, skillmeta.BuffSkill):
             )
 
     def process(self):
-        buff = buffs.LeyLineBuff()
-        self.give_buff(buff)
+        self.caster.receive_buff(buffs.LeyLineBuff())
 
 @skillmeta.ogcd
-class Swiftcast(skillmeta.OGCD, skillmeta.BuffSkill):
+class Swiftcast(skillmeta.OGCD):
 
     def __init__(self):
         super().__init__(
@@ -94,5 +91,5 @@ class Swiftcast(skillmeta.OGCD, skillmeta.BuffSkill):
             )
 
     def process(self):
-        buff = buffs.SwiftcastBuff()
-        self.give_buff(buff)
+        self.caster.receive_buff(buffs.SwiftcastBuff())
+

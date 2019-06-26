@@ -14,24 +14,18 @@ def ogcd(cls):
 
 class Skill:
 
-    def __init__(self, name, clock, cast_time, skill_type=''):
+    def __init__(self, name, clock, cast_time):
         self.name = name
         self.clock = clock
         self.caster = None
         self.targets = []
-        self.properties = {
-            'type': skill_type,
-            'cast_time': cast_time,
-            }
+        self.cast_time = cast_time
 
     def is_ready(self):
         return self.clock.is_zero()
 
     def process(self):
         pass
-
-    def get_type(self):
-        return self.properties['type']
 
     def is_castable(self, caster):
         return True
@@ -56,12 +50,12 @@ class Skill:
 class GCD(Skill):
 
     def __init__(self, name, gcd_clock, cast_time=2.5):
-        super().__init__(name, gcd_clock, cast_time, skill_type='gcd')
+        super().__init__(name, gcd_clock, cast_time)
 
 class OGCD(Skill):
 
     def __init__(self, name, cooldown):
-        super().__init__(name, Clock(0, default=cooldown), 0.75, skill_type='ogcd')
+        super().__init__(name, Clock(0, default=cooldown), 0.75)
 
     def execute(self, caster, targets):
         executed = super().execute(caster, targets)
@@ -69,15 +63,11 @@ class OGCD(Skill):
             self.process()
         return executed
 
-class BuffSkill(Skill):
+def give_buff(self, buff):
+    for target in self.targets:
+        target.receive_buff(buff)
 
-    def give_buff(self, buff):
-        for target in self.targets:
-            target.receive_buff(buff)
-
-class DamageSkill(Skill):
-
-    def do_damage(self, base_damage):
-        for target in self.targets:
-            damage = self.caster.buffed['damage_modifier'] * base_damage
-            target.take_damage(damage)
+def do_damage(self, base_damage):
+    for target in self.targets:
+        damage = self.caster.buffed['damage_modifier'] * base_damage
+        target.take_damage(damage)

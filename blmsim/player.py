@@ -1,6 +1,7 @@
 """ Player related stuffs """
 from blmsim import skills
-from blmsim.skillmeta import GCD_DICT, OGCD_DICT
+from blmsim import skillmeta
+from blmsim import buffs
 from blmsim.util.time import Clock
 from blmsim.util.logging import BLMLOG
 
@@ -25,9 +26,9 @@ class Player:
         self.clock.hook(self)
         # skills
         self.skills = {}
-        for k, skill in GCD_DICT.items():
+        for k, skill in skillmeta.GCD_DICT.items():
             self.skills[k] = skill(self.gcd)
-        for k, skill in OGCD_DICT.items():
+        for k, skill in skillmeta.OGCD_DICT.items():
             self.skills[k] = skill()
         self.on_cd_ogcds = []
 
@@ -38,12 +39,12 @@ class Player:
         skill = self.skills[skill_name]
         if not self.casting and skill.is_ready():
             self.casting = skill
-            if skill.properties['type'] == 'ogcd':
+            if isinstance(skill, skillmeta.OGCD):
                 self.on_cd_ogcds.append(skill)
             BLMLOG.info("-----------------------")
             self.me(f"begins to cast {self.casting}.")
             self.casting_time.set_time(
-                self.calc_cast_time(skill.properties['cast_time']))
+                self.calc_cast_time(skill.cast_time))
             self.gcd.default = self.buffed['gcd']
             return skill.execute(self, target)
         print(f"[{self.clock}] {skill} is not yet ready !!")
@@ -51,7 +52,7 @@ class Player:
 
     def on_casted(self):
         self.me(f"casted {self.casting} !")
-        if self.casting.properties['type'] == 'gcd':
+        if isinstance(self.casting, skillmeta.GCD):
             self.casting.process()
         if self.charge_buffs:
             for buff in self.charge_buffs:
@@ -79,7 +80,7 @@ class Player:
         self.casting_time.tock()
 
     def receive_buff(self, buff):
-        if buff.properties['type'] == 'charge':
+        if isinstance(buff, buffs.ChargeBuff):
             self.charge_buffs.append(buff)
         if buff.name in self.buffs:
             self.buffs[buff.name].renew(buff)

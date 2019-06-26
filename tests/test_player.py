@@ -22,8 +22,7 @@ class TestPlayer(unittest.TestCase):
         dummy = TargetDummy()
         self.assertTrue(player.cast('Blizzard I', dummy))
         self.assertTrue(player.casting)
-        tick_to_complete = Clock(
-            player.skills['Blizzard I'].properties['cast_time']).ticks
+        tick_to_complete = Clock(player.skills['Blizzard I'].cast_time).ticks
         self.assertFalse(player.cast('Fire IV', dummy))
         for _ in range(tick_to_complete):
             clock.tick()
@@ -36,8 +35,7 @@ class TestPlayer(unittest.TestCase):
         dummy = TargetDummy()
         self.assertTrue(player.cast('Swiftcast', player))
         self.assertTrue(player.casting)
-        tick_to_complete = Clock(
-            player.skills['Swiftcast'].properties['cast_time']).ticks
+        tick_to_complete = Clock(player.skills['Swiftcast'].cast_time).ticks
         self.assertEqual(len(player.buffs), 1)
         self.assertEqual(player.buffed['cast_time_multiplier'], 0)
         for _ in range(tick_to_complete):
@@ -54,8 +52,7 @@ class TestPlayer(unittest.TestCase):
         dummy = TargetDummy()
         self.assertTrue(player.cast('Blizzard I', dummy))
         self.assertTrue(player.casting)
-        tick_to_complete = Clock(
-            player.skills['Blizzard I'].properties['cast_time']).ticks
+        tick_to_complete = Clock(player.skills['Blizzard I'].cast_time).ticks
         for _ in range(tick_to_complete):
             clock.tick()
         self.assertTrue(player.casting)
@@ -65,11 +62,11 @@ class TestPlayer(unittest.TestCase):
     def test_player_enochian_validity(self):
         clock = Clock()
         player = Player('John', clock)
-        player.receive_buff(buffs.AstralFire(1))
+        player.receive_buff(buffs.AstralFireBuff(1))
         player.cast('Enochian', player)
         clock.tick()
         self.assertTrue('Enochian' in player.buffs)
-        for _ in range(buffs.AstralFire(1).duration.ticks):
+        for _ in range(buffs.AstralFireBuff(1).duration.ticks):
             clock.tick()
         self.assertFalse('Astral Fire' in player.buffs)
         self.assertFalse('Enochian' in player.buffs)
@@ -78,7 +75,7 @@ class TestPlayer(unittest.TestCase):
         clock = Clock()
         player = Player('John', clock)
         dummy = TargetDummy()
-        player.receive_buff(buffs.AstralFire(1))
+        player.receive_buff(buffs.AstralFireBuff(1))
         self.assertTrue(player.cast('Enochian', player))
         clock.tick()
         player.casting_time.set_time(0)
@@ -90,8 +87,7 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(player.buffs['Polyglot'].charge, 1)
         self.assertTrue(player.cast('Foul', dummy))
         clock.tick()
-        tick_to_complete = Clock(
-            player.skills['Foul'].properties['cast_time']).ticks
+        tick_to_complete = Clock(player.skills['Foul'].cast_time).ticks
         for _ in range(tick_to_complete):
             clock.tick()
         self.assertEqual(player.buffs['Polyglot'].charge, 0)
