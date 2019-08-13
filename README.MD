@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/zynaxsoft/blm-sim.svg?branch=develop)](https://travis-ci.com/zynaxsoft/blm-sim)
+
 <img src=/uploads/2a4e12c152145917adfd5787d2b52357/image.png width=400><br>
 
 # 
